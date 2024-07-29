@@ -4,18 +4,22 @@ import bcrypt from 'bcryptjs'
 
 const updatePassword = async (req: Request, res: Response) => {
 	try {
+		// @ts-ignore: Unreachable code error
 		const { _id } = req.user
-		const { oldPass, newPass } = req.body
+		const { oldPassword, newPassword } = req.body
+		if (!oldPassword || !newPassword) {
+			return res.status(400).json({ message: 'Old and new passwords are required.' })
+		}
 		const user = await User.findById(_id)
 		if (!user) {
 			return res.send('Invalid user request!')
 		}
-		const compareOldPass = await bcrypt.compare(oldPass, user.password)
+		const compareOldPass = await bcrypt.compare(oldPassword, user.password)
 		if (!compareOldPass) {
 			return res.send('Please enter valid password!')
 		}
-		const password = await bcrypt.hash(newPass, 12)
-		user.password = password
+		const hashNewPass = await bcrypt.hash(newPassword, 12)
+		user.password = hashNewPass
 		await user.save()
 		return res.send('Password updated successfully!')
 	} catch (error) {

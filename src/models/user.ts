@@ -4,10 +4,17 @@ export interface IUser extends Document {
 	_id: string
 	email: string
 	password: string
-	phoneNumber?: string
+	phoneNumber: string
 	twoFactorEnabled: boolean
 	isEmailVerified: boolean
 	isPhoneVerified: boolean
+	secret?: string
+	profile: {
+		firstName: string
+		lastName: string
+	}
+	countryCode: string
+	dob: Date
 	role?: 'admin' | 'superAdmin' | 'user'
 	twoFactorMethod?: 'email' | 'phone' | 'authenticator'
 	passwordResetToken?: string
@@ -24,6 +31,16 @@ const userSchema: Schema = new Schema<IUser>(
 		twoFactorEnabled: { type: Boolean, default: false },
 		isEmailVerified: { type: Boolean, default: false },
 		isPhoneVerified: { type: Boolean, default: false },
+		profile: {
+			firstName: String,
+			lastName: String,
+		},
+		countryCode: {
+			type: String,
+			required: true,
+		},
+		secret: { type: String },
+		dob: Date,
 		emailUpdateToken: String,
 		emailUpdateTokenExpires: Date,
 		passwordResetToken: String,
