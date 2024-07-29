@@ -38,7 +38,7 @@ export const twofasend = async (req: Request, res: Response) => {
 			}
 
 			if (twoFactorMethod === 'email') {
-				await send_email(user.email)
+				await send_email(user.email, code)
 				user.twoFactorMethod = twoFactorMethod
 				await user.save()
 				return res.status(200).json({ message: `OTP sent to email: ${user.email}` })

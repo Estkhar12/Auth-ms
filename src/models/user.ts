@@ -9,13 +9,18 @@ export interface IUser extends Document {
 	isEmailVerified: boolean
 	isPhoneVerified: boolean
 	secret?: string
+	address?: [object]
 	profile: {
 		firstName: string
 		lastName: string
 	}
+
 	countryCode: string
+	tempEmail?: string
+	tempPhone?: string
+	tempCountryCode: string
 	dob: Date
-	role?: 'admin' | 'superAdmin' | 'user'
+	role?: 'admin' | 'seller' | 'user'
 	twoFactorMethod?: 'email' | 'phone' | 'authenticator'
 	passwordResetToken?: string
 	passwordResetExpires?: Date
@@ -39,13 +44,41 @@ const userSchema: Schema = new Schema<IUser>(
 			type: String,
 			required: true,
 		},
+		address: [
+			{
+				street: {
+					type: String,
+				},
+				area: {
+					type: String,
+				},
+				city: {
+					type: String,
+				},
+				zipcode: {
+					type: String,
+				},
+				state: {
+					type: String,
+				},
+				country: {
+					type: String,
+				},
+			},
+		],
+		dob: {
+			type: Date,
+			required: true,
+		},
 		secret: { type: String },
-		dob: Date,
+		tempEmail: { type: String },
+		tempPhone: { type: String },
+		tempCountryCode: { type: String },
 		emailUpdateToken: String,
 		emailUpdateTokenExpires: Date,
 		passwordResetToken: String,
 		passwordResetExpires: Date,
-		role: { type: String, enum: ['admin', 'superAdmin', 'user'], default: 'user' },
+		role: { type: String, enum: ['admin', 'seller', 'user'], default: 'user' },
 		twoFactorMethod: { type: String, enum: ['email', 'phone', 'authenticator'] },
 	},
 	{ timestamps: true }

@@ -16,13 +16,12 @@ export const verify_token = async (req: Request, res: Response, next: NextFuncti
 			return res.status(400).json({ error: 'Invalid token' })
 		}
 		const decode = jwt.verify(token, jwt_secret) as JwtPayload
-
-		const result = await User.findById(decode?._id)
-		if (!result) {
+		const user = await User.findById(decode?._id)
+		if (!user) {
 			return res.status(400).json({ error: 'Invalid user' })
 		}
-		// @ts-ignore: Unreachable code error
-		req.user = User
+
+		req.user = user
 		next()
 	} catch (error) {
 		console.log('something went wront while verifing the token', error)

@@ -1,30 +1,27 @@
 import { Request, Response } from 'express'
 import User from '../../../models/user'
-import bcrypt from 'bcryptjs'
+import { comparePassword, hashPassword } from '../../../utils/password'
 
-const updatePassword = async (req: Request, res: Response) => {
+export const updateUserPassword = async (req: Request, res: Response) => {
 	try {
-		// @ts-ignore: Unreachable code error
 		const { _id } = req.user
-		const { oldPassword, newPassword } = req.body
-		if (!oldPassword || !newPassword) {
-			return res.status(400).json({ message: 'Old and new passwords are required.' })
-		}
+		const { oldPass, newPass } = req.body
 		const user = await User.findById(_id)
 		if (!user) {
-			return res.send('Invalid user request!')
+			return res.status(400).json({ error: 'Invalid user request' })
 		}
-		const compareOldPass = await bcrypt.compare(oldPassword, user.password)
+		const compareOldPass = await comparePassword(oldPass, user.password)
 		if (!compareOldPass) {
-			return res.send('Please enter valid password!')
+			return res.status(400).json({ error: 'Please enter correct password.' })
 		}
-		const hashNewPass = await bcrypt.hash(newPassword, 12)
-		user.password = hashNewPass
+		const password = await hashPassword(newPass)
+		user.password = password
 		await user.save()
-		return res.send('Password updated successfully!')
+		return res
+			.status(200)
+			.json({ message: 'Password updated successfully', data: { _user: user._id } })
 	} catch (error) {
+		console.log(error)
 		return res.status(500).json({ error: error })
 	}
 }
-
-export default updatePassword
