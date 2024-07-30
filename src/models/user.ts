@@ -1,49 +1,44 @@
 import { Document, Schema, model } from 'mongoose'
 
 export interface IUser extends Document {
-	_id: string
 	email: string
 	password: string
+	username: string
 	phoneNumber: string
 	twoFactorEnabled: boolean
 	isEmailVerified: boolean
 	isPhoneVerified: boolean
+	isVerified: boolean
+	isActive: boolean
 	secret?: string
+	isBlocked: boolean
 	address?: [object]
-	profile: {
-		firstName: string
-		lastName: string
-	}
-
 	countryCode: string
-	tempEmail?: string
-	tempPhone?: string
-	tempCountryCode: string
 	dob: Date
-	role?: 'admin' | 'seller' | 'user'
+	role?: 'seller' | 'user'
 	twoFactorMethod?: 'email' | 'phone' | 'authenticator'
 	passwordResetToken?: string
 	passwordResetExpires?: Date
 	emailUpdateToken?: string
 	emailUpdateTokenExpires?: Date
+	tempEmail?: string
+	tempPhone?: string
+	tempCountryCode: string
 }
 
 const userSchema: Schema = new Schema<IUser>(
 	{
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
+		username: { type: String },
 		phoneNumber: { type: String },
 		twoFactorEnabled: { type: Boolean, default: false },
 		isEmailVerified: { type: Boolean, default: false },
 		isPhoneVerified: { type: Boolean, default: false },
-		profile: {
-			firstName: String,
-			lastName: String,
-		},
-		countryCode: {
-			type: String,
-			required: true,
-		},
+		isActive: { type: Boolean, default: false },
+		isVerified: { type: Boolean, default: false },
+		isBlocked: { type: Boolean, default: false },
+		countryCode: { type: String, required: true },
 		address: [
 			{
 				street: {

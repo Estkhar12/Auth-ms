@@ -69,7 +69,7 @@ export const verifyUserOtp = async (req: Request, res: Response) => {
 				isOtpVerified = true
 			} else {
 				return res.status(400).json({
-					error: `Incorrect OTP! Please check your ${user.authMethod} and provide the correct OTP.`,
+					error: `Incorrect OTP! Please check your ${user.twoFactorMethod} and provide the correct OTP.`,
 				})
 			}
 		}
