@@ -6,10 +6,10 @@ import User from '../../../models/user'
 
 export const phoneVerification = async (req: Request, res: Response) => {
 	try {
-		const { phone } = req.body
-		const user = await User.findOne({ phone: phone })
+		const { phoneNumber } = req.body
+		const user = await User.findOne({ phoneNumber: phoneNumber })
 		const code = generate_random_number(6).toString()
-
+		console.log(code)
 		if (!user) {
 			return res.status(404).json({ error: 'No user exists with the provided phone' })
 		}
@@ -27,10 +27,10 @@ export const phoneVerification = async (req: Request, res: Response) => {
 				_user: user._id,
 			})
 		}
-		await send_sms(user.countryCode, user.phoneNumber, code)
+		const otpSend = await send_sms(user.countryCode, user.phoneNumber, code)
 		return res.status(200).json({
 			message: 'An OTP has been sent to your phone. Please verify it first',
-			data: { phone: user.phoneNumber },
+			data: { phoneNumber: user.phoneNumber },
 		})
 	} catch (error) {
 		console.log(error)

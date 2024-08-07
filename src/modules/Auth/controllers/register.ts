@@ -11,7 +11,6 @@ export const register_user = async (req: Request, res: Response) => {
 			return res.send({ message: 'User Already Registered, Please Login' })
 		}
 		const hashedPassword = await hashPassword(password)
-
 		//Validate DOB using moment
 		if (!isValidDate(dob)) {
 			return res.status(400).json({ error: 'Invalid date of birth' })

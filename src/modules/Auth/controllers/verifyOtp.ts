@@ -15,16 +15,17 @@ export const verifyUserOtp = async (req: Request, res: Response) => {
 		if (!isValidObjectId(id)) {
 			return res.status(400).json({ error: 'Invalid ObjectId.' })
 		}
-		const user = await User.findById(id)
+		const user: any = await User.findById(id)
 		if (!user) {
 			return res.status(400).json({ error: 'User not found' })
 		}
-		const code = await Otp.findOne({ _user: user._id, purpose: purpose })
 
+		const code: any = await Otp.findOne({ _user: user._id, purpose: purpose })
 		if (!Object.values(OtpTypes).includes(purpose)) {
 			return res.status(400).json({ error: 'Invalid OTP purpose' })
 		}
-		if (!code || code.otpExpireAt < new Date()) {
+		const otpExpireAt = new Date(code.otpExpireAt)
+		if (!code || !otpExpireAt || otpExpireAt < new Date()) {
 			return res.status(400).json({ error: 'OTP expired or not found' })
 		}
 
@@ -78,7 +79,6 @@ export const verifyUserOtp = async (req: Request, res: Response) => {
 			code.otp = null // Clear the OTP
 			user.secret = undefined // Clear the secret if using authenticator
 			user.isActive = true
-			user.isEmailVerified = true
 			const payload = {
 				_id: user._id.toString(),
 				role: user.role,

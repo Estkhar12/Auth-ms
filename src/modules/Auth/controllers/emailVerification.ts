@@ -17,7 +17,6 @@ export const emailVerification = async (req: Request, res: Response) => {
 		if (!user) {
 			return res.status(404).json({ error: 'No user exists with the provided email' })
 		}
-
 		if (user.isEmailVerified) {
 			return res
 				.status(200)
@@ -25,7 +24,6 @@ export const emailVerification = async (req: Request, res: Response) => {
 		}
 
 		const code = generate_random_number(6).toString()
-
 		const otpData = await Otp.findOne({ _user: user._id })
 		if (otpData) {
 			otpData.otp = code
@@ -41,13 +39,12 @@ export const emailVerification = async (req: Request, res: Response) => {
 			})
 		}
 
-		await send_email(user.email, code)
+		await send_email(code, user.email)
 		return res.status(200).json({
 			message: 'An OTP has been sent to your email. Please verify it.',
 			data: { email: user.email },
 		})
 	} catch (error) {
-		console.log(error)
 		return res.status(500).json({ error: error })
 	}
 }

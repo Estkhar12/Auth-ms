@@ -8,7 +8,7 @@ import { phoneVerification } from '../controllers/phoneVerification'
 import { updateUserEmail } from '../controllers/updateEmail'
 import { emailVerification } from '../controllers/emailVerification'
 import { updateUserPassword } from '../controllers/updatePassword'
-import { profileDetails } from '../controllers/profile'
+import { profileDetails } from '../controllers/profileDetail'
 import { profileUpdate } from '../controllers/updateProfile'
 import { verifyUserOtp } from '../controllers/verifyOtp'
 import { updatePhone } from '../controllers/updatePhone'
@@ -21,17 +21,17 @@ const router = express.Router()
 
 router.post('/signup', register_user)
 router.post('/login', login_user)
-router.post('/forget-password', forgetPassword)
 router.post('/resetPassword/:resetToken', resetPassword)
 router.post('/send-otp', twofasend)
 router.post('/verify/phone', phoneVerification)
 router.post('/verify/email', emailVerification)
 router.post('/verify-otp', verifyUserOtp)
-router.patch('/change-two-fa', changeTwoFA)
+router.patch('/changeTwoFA', changeTwoFA)
 
 // secure route
 router.use(verify_token)
-router.get('/profile', profileDetails)
+router.post('/forgetPassword', forgetPassword)
+router.get('/getProfileDetail', profileDetails)
 router.patch('/update-email', updateUserEmail)
 router.patch('/update-password', updateUserPassword)
 router.patch('/update-phone', updatePhone)

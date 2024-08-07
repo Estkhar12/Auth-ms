@@ -31,11 +31,11 @@ export const forgetPassword = async (req: Request, res: Response) => {
 			subject: 'Your password reset token (valid for 10 minutes)',
 			text: message,
 		}
-
-		const emailRes = await send_email(emailData)
+		const emailResponse = await send_email(emailData)
 		res.status(200).json({
 			status: 'success',
 			message: 'Token sent to email!',
+			data: emailResponse,
 		})
 	} catch (err) {
 		return res.status(500).json({

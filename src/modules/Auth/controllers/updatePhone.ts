@@ -47,7 +47,6 @@ export const updatePhone = async (req: Request, res: Response) => {
 		user.tempPhone = phoneNumber
 		user.tempCountryCode = countryCode
 		await user.save()
-
 		await send_sms(countryCode, phoneNumber, otp)
 		return res.status(200).json({
 			message: 'An OTP has been sent to your phone. Please verify first..',

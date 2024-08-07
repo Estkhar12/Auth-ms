@@ -16,7 +16,7 @@ export interface IUser extends Document {
 	countryCode: string
 	dob: Date
 	role?: 'seller' | 'user'
-	twoFactorMethod?: 'email' | 'phone' | 'authenticator'
+	twoFactorMethod?: 'email' | 'phoneNumber' | 'authenticator'
 	passwordResetToken?: string
 	passwordResetExpires?: Date
 	emailUpdateToken?: string
@@ -31,7 +31,7 @@ const userSchema: Schema = new Schema<IUser>(
 		email: { type: String, required: true, unique: true },
 		password: { type: String, required: true },
 		username: { type: String },
-		phoneNumber: { type: String },
+		phoneNumber: { type: String, required: true, unique: true },
 		twoFactorEnabled: { type: Boolean, default: false },
 		isEmailVerified: { type: Boolean, default: false },
 		isPhoneVerified: { type: Boolean, default: false },
@@ -74,7 +74,7 @@ const userSchema: Schema = new Schema<IUser>(
 		passwordResetToken: String,
 		passwordResetExpires: Date,
 		role: { type: String, enum: ['admin', 'seller', 'user'], default: 'user' },
-		twoFactorMethod: { type: String, enum: ['email', 'phone', 'authenticator'] },
+		twoFactorMethod: { type: String, enum: ['email', 'phoneNumber', 'authenticator'] },
 	},
 	{ timestamps: true }
 )

@@ -17,8 +17,8 @@ export const login_user = async (req: Request, res: Response) => {
 		if (!user.isEmailVerified || !user.isPhoneVerified) {
 			return res.send('Your email or phone is not verified!')
 		}
-		const payload: IPayload = { _id: user._id.toString() }
-		const token = generate_token(payload)
+		const payload = { _id: user._id, role: user.role }
+		const token = generate_token(payload as IPayload)
 		res.status(200).json({
 			success: true,
 			messgage: 'Login Successfully "Verified"',

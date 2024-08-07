@@ -8,7 +8,6 @@ export const updateUserEmail = async (req: Request, res: Response) => {
 	try {
 		const { _id } = req.user
 		const { email } = req.body
-
 		// Validate email using Regex
 		if (!isValidEmail(email)) {
 			return res.status(400).json({ error: 'Invalid email format' })

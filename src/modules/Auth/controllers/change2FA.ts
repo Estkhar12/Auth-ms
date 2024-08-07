@@ -13,7 +13,7 @@ export const changeTwoFA = async (req: Request, res: Response) => {
 			await user.save()
 			return res
 				.status(200)
-				.json({ message: 'Authentication method has been changed to email.' })
+				.json({ message: 'A uthentication method has been changed to email.' })
 		} else if (twoFactorMethod === 'phoneNumber') {
 			user.twoFactorMethod = twoFactorMethod
 			await user.save()
