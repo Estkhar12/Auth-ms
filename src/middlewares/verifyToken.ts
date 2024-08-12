@@ -20,7 +20,7 @@ export const verify_token = async (req: Request, res: Response, next: NextFuncti
 		if (!decoded || typeof decoded._id !== 'string' || typeof decoded.role !== 'string') {
 			return res.status(400).json({ error: 'Invalid token payload' })
 		}
-		const user = await User.findById(decoded._id).lean()
+		const user = await User.findById(decoded._id)
 		if (!user) {
 			return res.status(400).json({ error: 'Invalid user' })
 		}
